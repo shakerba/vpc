@@ -49,7 +49,7 @@ The following table details what actions are mapped to platform management roles
 | Editor                   | All actions that can modify the state of the resource (such as create, delete, and edit) as well as create and delete subresources  |<ul><li>Create, delete, and edit VPCs</li><li>Attach and detach volumes</li></ul>                    |
 | Operator                 | All Viewer actions, plus actions that change the association of the resource to other resources.| <ul><li>Associate a floating IP with a virtual server instance (if you have Editor access to the instance)</li><li>Create an instance in your VPC (if you have Editor access to instances)</li></ul> |
 | Viewer                   | Actions that don't change the state of resources            | <ul><li>View and list subnets</li><li>View monitoring and log data</li></ul>                     |
-{: caption="Table 1. IAM user roles and actions" caption-side="top"}
+{: caption="Table 1. IAM user roles and actions" caption-side="bottom"}
 
 ### Tips
 {: #iam-tips}

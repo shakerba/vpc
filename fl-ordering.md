@@ -1,8 +1,8 @@
 ---
 
 copyright:
-  years: 2020, 2021
-lastupdated: "2021-08-13"
+  years: 2020, 2022
+lastupdated: "2022-05-05"
 
 keywords: flow logs, ordering, getting started
 
@@ -22,17 +22,86 @@ When you are provisioning a flow log collector, keep in mind that [the finest gr
 {: tip}
 
 ## Prerequisites
-{: #fl-before-you-begin}
+{: #fl-before-you-begin-ui}
+{: ui}
 
 Before you create a flow log collector, make sure that you meet the following prerequisites:
 
 1. Make sure that at least one VPC, a subnet, and a virtual server instance exist. For instructions, see [Creating a VPC and subnet](/docs/vpc?topic=vpc-creating-a-vpc-using-the-ibm-cloud-console#creating-a-vpc-and-subnet) and [Creating a virtual server instance](/docs/vpc?topic=vpc-creating-a-vpc-using-the-ibm-cloud-console#creating-a-vsi).
-2. Make sure that a Cloud Object Storage (COS) instance with a bucket exists for your flow logs. To create a COS bucket, see the [Cloud Object Storage](https://cloud.ibm.com/catalog/services/cloud-object-storage) ordering page.  
+1. Make sure that a Cloud Object Storage (COS) instance with a bucket exists for your flow logs. To create a COS bucket, see the [Cloud Object Storage](https://cloud.ibm.com/catalog/services/cloud-object-storage) ordering page.  
 
    The COS bucket must be a single-region bucket in the same region as the target resource. Additionally, it is recommended that you secure the bucket through IAM access groups and audit logging.
    {: important}
 
-3. Authorize resources of type **Flow Logs for VPC** to use the COS instance created in Step 2.
+1. Authorize resources of type **Flow Logs for VPC** to use the COS instance created in Step 2.
+
+   To do so, use the following steps:
+
+   * In the IBM Cloud console, click **Manage > Access (IAM)**, then select **Authorizations** from the navigation pane.
+   * Click **Create** and complete the following information:
+
+      For Source service:
+
+      * Select **VPC Infrastructure Services**.
+      * Select **Resources based on selected attributes**.
+      * For Resource type, select **Flow Logs for VPC**.
+      * For Source service instance, select **All instances**.
+
+      For Target service:
+      * Select **Cloud Object Storage**.
+      * Select **Resources based on selected attributes**.
+      * For Service instance, select **string equals > All instances**.
+
+      For Service access, select the **Writer** role to assign access to the source service that accesses the target service.
+
+   * Click **Authorize**.   
+
+   For more information, see [Using authorizations to grant access between services](/docs/account?topic=account-serviceauth#create-auth).
+   {: note}
+   
+## Prerequisites
+{: #fl-before-you-begin-cli}
+{: cli}
+
+Before you create a flow log collector, make sure that you meet the following prerequisites:
+
+1. Make sure that at least one VPC, a subnet, and a virtual server instance exist. For instructions, see [Creating a VPC and subnet](/docs/vpc?topic=vpc-creating-a-vpc-using-the-ibm-cloud-console#creating-a-vpc-and-subnet) and [Creating a virtual server instance](/docs/vpc?topic=vpc-creating-a-vpc-using-the-ibm-cloud-console#creating-a-vsi).
+1. Make sure that a Cloud Object Storage (COS) instance with a bucket exists for your flow logs. To create a COS bucket, see the [Cloud Object Storage](https://cloud.ibm.com/catalog/services/cloud-object-storage) ordering page.  
+
+   The COS bucket must be a single-region bucket in the same region as the target resource. Additionally, it is recommended that you secure the bucket through IAM access groups and audit logging.
+   {: important}
+   
+1. Authorize resources of type **Flow Logs for VPC** to use the COS instance created in Step 2.
+
+   To do so, enter the following command:
+   
+   ```sh
+   ibmcloud iam authorization-policy-create is cloud-object-storage Writer --source-resource-type flow-log-collector --target-service-instance-id $COS_INSTANCE_GUID
+   
+   ibmcloud iam authorization-policy-create is cloud-object-storage Reader --source-resource-type image --target-service-instance-id $COS_INSTANCE_GUID
+   ```
+   {: codeblock}
+
+   You can obtain the `COS_INSTANCE_GUID` from the Service credentials section for the COS instance as shown.
+
+   ![COS Service credentials](images/flow-logs-service-credentials.png){: caption="COS Service credentials" caption-side="bottom"}
+ 
+   For more information, see [Using authorizations to grant access between services](/docs/account?topic=account-serviceauth#create-auth).
+   {: note}
+   
+## Prerequisites
+{: #fl-before-you-begin-api}
+{: api}
+
+Before you create a flow log collector, make sure that you meet the following prerequisites:
+
+1. Make sure that at least one VPC, a subnet, and a virtual server instance exist. For instructions, see [Creating a VPC and subnet](/docs/vpc?topic=vpc-creating-a-vpc-using-the-ibm-cloud-console#creating-a-vpc-and-subnet) and [Creating a virtual server instance](/docs/vpc?topic=vpc-creating-a-vpc-using-the-ibm-cloud-console#creating-a-vsi).
+1. Make sure that a Cloud Object Storage (COS) instance with a bucket exists for your flow logs. To create a COS bucket, see the [Cloud Object Storage](https://cloud.ibm.com/catalog/services/cloud-object-storage) ordering page.  
+
+   The COS bucket must be a single-region bucket in the same region as the target resource. Additionally, it is recommended that you secure the bucket through IAM access groups and audit logging.
+   {: important}
+
+1. Authorize resources of type **Flow Logs for VPC** to use the COS instance created in Step 2.
 
    To do so, use the following steps:
 

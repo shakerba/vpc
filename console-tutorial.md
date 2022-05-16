@@ -1,12 +1,12 @@
 ---
 
 copyright:
-  years: 2018, 2021
+  years: 2018, 2022
 
-lastupdated: "2021-12-20"
+lastupdated: "2022-05-03"
 
 
-keywords: vpc, virtual private cloud, vpc ui, console, access control list, virtual server instance, subnet, block storage volume, security group, images, monitoring, ssh key, ip range, generation 2, gen 2
+keywords: vpc, virtual private cloud, vpc ui, console, access control list, virtual server instance, subnet, block storage volume, security group, images, monitoring, ssh key, ip range
 
 subcollection: vpc
 
@@ -175,17 +175,17 @@ You can create a block storage volume and attach it to your virtual server insta
 To create and attach a block storage volume:
 
 1. In the navigation pane, click **Storage > Block storage volumes**.
-1. On the Block storage volumes for VPC page, click **Create** and specify the following information.
+1. Click **New volume** and specify the following information.
    * **Name**: Enter a name for the block storage volume, such as `data-volume-1`.
    * **Resource group**: Select a resource group for the block storage volume. You can use resource groups to organize your account resources for access control and billing purposes. For more information, see [Best practices for organizing resources in a resource group](/docs/account?topic=account-account_setup).
    * **Tags**: _Optional:_ Enter tags to help you organize and find your resources. You can add more tags later. For more information, see [Working with tags](/docs/account?topic=account-tag).
    * **Location**: Select a location for the block storage volume. The location consists of a region and a zone, for example US South 1.
-   * **IOPs**: Select one of the IOPs Tiers or click **Custom** to enter an IOPs value based on volume size.
-   * **Size**: Specify the size of the volume between 10 GBs and 16000 GBs.
-   * **Encryption**: Encryption with IBM-managed keys is enabled by default on all volumes. You can also choose a customer-managed option and use [your own encryption key](/docs/vpc?topic=vpc-block-storage-vpc-encryption).
+   * **Size**: Specify the size of the volume between 10 GBs and 2000 GBs.
+   * **IOPs**: Select one of the IOPs Tiers or click Custom to enter an IOPs value based on volume size.
+   * **Encryption**: Accept the default *Provider managed* encryption option.
 1. Click **Create volume**.
 1. In the list of block storage volumes, find the volume that you created. When the status is Available, click "..." and select **Attach to instance**.
-1. Select the instance to which you want to attach the volume and click **Attach volume**.
+1. Select the instance to which you want to attach the volume and click **Attach**.
 
 ## Configuring the security group for the instance
 {: #configuring-the-security-group}
@@ -198,44 +198,25 @@ To configure the security group:
 1. In the navigation pane, click **Compute > Virtual server instances**.
 1. Click your instance to view its details.
 1. In the **Network interfaces** section, click the name of the security group.
-1. On the **Rules** tab of the security group details page, click **Create** to configure inbound and outbound rules that define what type of traffic is allowed to and from the instance. For each rule, specify the following information: 
-   * Select the protocols and ports to which the rule applies. 
-   * Specify a CIDR block or IP address for the permitted traffic. Alternatively, you can specify a security group in the same VPC to allow traffic to or from all instances that are attached to the selected security group.      
+1. On the **Rules** tab of the security group details page, click **Create** to configure inbound and outbound rules that define what type of traffic is allowed to and from the instance. For each rule, specify the following information:  
+   * Select the protocols and ports to which the rule applies.    
+   * Specify a CIDR block or IP address for the permitted traffic. Alternatively, you can specify a security group in the same VPC to allow traffic to or from all instances that are attached to the selected security group. 
 
    **Tips:**  
    * All rules are evaluated, regardless of the order in which they're added.
    * Rules are stateful, which means that return traffic in response to allowed traffic is automatically permitted. For example, you created a rule that allows inbound TCP traffic on port 80. That rule also allows replying outbound TCP traffic on port 80 back to the originating host, without the need for another rule.
    * For Windows images, make sure that the security group that is associated with the instance allows inbound and outbound Remote Desktop Protocol traffic (TCP port 3389).
-1. _Optional:_ To view interfaces that are attached to the security group, click the **Attached resources** tab and review the Attached interfaces section.
-1. When you finish creating rules, click the **Security groups for VPC** breadcrumb at the beginning of the page.
+1. _Optional:_ To view interfaces that are attached to the security group, click **Attached resources** tab and review the Attached interfaces section.
+1. When you finish creating rules, click the **Security groups** breadcrumb at the beginning of the page.
 
-
-### Example security group
-{: #example-security-group}
-
-For example, you can configure the following inbound rules:
-
-   * Allow all SSH traffic (TCP port 22)
-   * Allow all ping traffic (ICMP type 8)
-
-| Protocol | Source Type | Source | Value |
-|-----------|------|------|------|
-| TCP| Any | 0.0.0.0/0 | Ports 22-22 |
-| ICMP | Any | 0.0.0.0/0 | Type: 8, Code: Any|
-{: caption="Table 1. Configuration information for inbound rules" caption-side="bottom"}
-
-Then, configure outbound rules that allow all TCP traffic:
-
-| Protocol | Destination Type | Source | Value |
-|-----------|------|------|------|
-| TCP| Any | 0.0.0.0/0 | Any port|
-{: caption="Table 2. Configuration information for outbound rules" caption-side="bottom"}
+   For more information about security groups, see [About security groups](/docs/vpc?topic=vpc-using-security-groups).
+   {: note}
 
 ## Reserving a floating IP address
 {: #reserving-a-floating-ip-address}
 {: step}
 
-Reserve and associate a floating IP address if you want your instance to be reachable from the internet.  
+Reserve and associate a floating IP address if you want your instance to be reachable from the internet.
 
 Your instance must be running before you can associate a floating IP address. It can take a few minutes for the instance to be up and running.
 {: tip}
@@ -244,11 +225,9 @@ To reserve and associate a floating IP address:
 
 1. In the navigation pane, click **Compute > Virtual server instances**.
 1. Click your instance to view its details.
-1. In the **Network interfaces** section, click the pencil icon to edit the interface that you want to associate with a floating IP address. 
-1. On the Edit network interface page, find the Floating IP address drop-down menu and select **Reserve a new floating IP**.
-1. Click **Save**.
+1. In the **Network interfaces** section, click **Reserve** for the interface that you want to associate with a floating IP address.
 
-You can later reassign this floating IP address to another instance in the same zone. To do this, you can find the floating IP address on the **Network > Floating IPs** page, click its overflow menu (**...**), and click **Release**. Then, click **Bind** to select the instance and network interface that you want to associate with the floating IP address.
+You can later reassign this floating IP address to another instance in the same zone. To do this, you can find the floating IP address on the **Network > Floating IPs** page, click its overflow menu (**...**), and click **Unassociate**. Then, click **Associate** to select the instance and network interface that you want to associate with the floating IP address.
 {: tip}
 
 ## Connecting to your instance
@@ -257,7 +236,7 @@ You can later reassign this floating IP address to another instance in the same 
 
 Using the floating IP address that you created, ping your instance to make sure it's up and running:
 
-```
+```sh
 ping <public-ip-address>
 ```
 {: pre}
@@ -267,7 +246,7 @@ ping <public-ip-address>
 
 Since you created your instance with a public SSH key, you can now connect to it directly by using your private key:
 
-```
+```sh
 ssh -i <path-to-private-key-file> root@<public-ip-address>
 ```
 {: pre}
